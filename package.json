@@ -1,0 +1,18 @@
+{
+  "name": "email-correction-api",
+  "version": "1.0.0",
+  "description": "A simple API to correct mistyped email domains and update HighLevel contacts",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Matt Ratliff",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}
+

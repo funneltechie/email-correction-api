@@ -1,0 +1,8 @@
+# Node modules and environment variables
+node_modules/
+.env
+
+# OS + IDE junk
+.DS_Store
+.vscode/
+
