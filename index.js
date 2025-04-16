@@ -1,4 +1,3 @@
-// index.js
 import express from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv';
@@ -7,7 +6,6 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-// Email typo corrections
 const emailCorrections = {
   'gamil.com': 'gmail.com',
   'gnail.com': 'gmail.com',
@@ -47,14 +45,35 @@ function correctEmail(inputEmail) {
 }
 
 app.post('/correct-email', async (req, res) => {
-  const { inputEmail, contactId, apiKey } = req.body;
+  // 🔐 Secure endpoint with x-api-key
+  const userSecret = req.headers['x-api-key'];
+  const allowedSecret = process.env.EMAIL_CORRECTION_SECRET;
+
+  if (userSecret !== allowedSecret) {
+    return res.status(403).json({
+      success: false,
+      message: 'Unauthorized: invalid API key'
+    });
+  }
+
+  const { inputEmail, contactId } = req.body;
+  const apiKey = process.env.GHL_API_KEY;
+
   if (!inputEmail || !contactId || !apiKey) {
-    return res.status(400).json({ success: false, message: 'Missing inputEmail, contactId, or apiKey' });
+    return res.status(400).json({
+      success: false,
+      message: 'Missing required fields'
+    });
   }
 
   const correctedEmail = correctEmail(inputEmail);
+
   if (correctedEmail === inputEmail) {
-    return res.json({ success: true, message: 'No correction needed', email: inputEmail });
+    return res.json({
+      success: true,
+      message: 'No correction needed',
+      email: inputEmail
+    });
   }
 
   try {
@@ -85,5 +104,5 @@ app.post('/correct-email', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`API running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Email Correction API running on port ${PORT}`));
 
