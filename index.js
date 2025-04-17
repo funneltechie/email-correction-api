@@ -56,6 +56,9 @@ app.post('/correct-email', async (req, res) => {
     });
   }
 
+// 🧪 Add this to debug what's coming in
+  console.log("DEBUG BODY:", req.body);
+
   const { inputEmail, contactId } = req.body;
   const apiKey = process.env.GHL_API_KEY;
 
